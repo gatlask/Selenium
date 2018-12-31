@@ -1,2 +1,9 @@
-Installed and configured Selenium
-Webdirver in visual studio
+
+added the NuGet Packages for Selenium
+
+both selenium support and webdriver
+
+
+downloaded chrome driver.exe and firefox driver.exe file and made it available in the path,
+
+adding using statements for selenium webdriver and firefox
