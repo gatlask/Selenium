@@ -23,17 +23,17 @@ namespace FillSignup
             OpenPage(driver, "https://tsrtconline.in/oprs-web/");
 
             ConfirmPage(driver, "Main");
-            Thread.Sleep(1000);
+         //   Thread.Sleep(1000);
 
             //Open Login Page
             OpenPageByElement(driver, "eTicket Login");
             ConfirmPage(driver, "Login");
-            Thread.Sleep(1000);
+           // Thread.Sleep(1000);
 
             // Open Signup Page
             OpenPageByElement(driver, "SignUp");
             ConfirmPage(driver, "SignUp");
-            Thread.Sleep(1000);
+            //Thread.Sleep(1000);
 
             //Fill Signup Page
 
@@ -50,8 +50,10 @@ namespace FillSignup
             ((ITakesScreenshot)driver).GetScreenshot().SaveAsFile("Test.png");
 
 
-            //Close the browser
-            //       driver.Close();
+            //Close the browser and command prompt
+            driver.Close();
+            driver.Quit();
+            
         }
 
 
@@ -131,16 +133,13 @@ namespace FillSignup
             // IWebElement elmt;
 
             //enter Login Name
-            element = driver.FindElement(By.Name("loginName"));
-            element.SendKeys(usr1.loginName);
-
+            driver.FindElement(By.Name("loginName")).SendKeys(usr1.loginName);
+            
             //enter Name
-            element = driver.FindElement(By.Name("fullName"));
-            element.SendKeys(usr1.fullName);
+            driver.FindElement(By.Name("fullName")).SendKeys(usr1.fullName);
 
             //enter email
-            element = driver.FindElement(By.Name("email"));
-            element.SendKeys(usr1.email);
+            driver.FindElement(By.Name("email")).SendKeys(usr1.email);
 
 
             //enter gender
@@ -153,50 +152,34 @@ namespace FillSignup
                 driver.FindElement(By.Id("genderId")).FindElement(By.XPath(".//option[contains(text(),'FEMALE')]")).Click();
             }
 
+            //enter Dob
+            element = driver.FindElement(By.Name("txtDob"));
+            element.Click();
 
-            //enter Login Name
-            element = driver.FindElement(By.Name("mobileNo"));
-            element.SendKeys(Convert.ToString(usr1.mobileNo));
+            element = driver.FindElement(By.XPath("//*[@id=\"ui-datepicker-div\"]"));
+            if (element.Displayed)
+            {
+                //select year
+                SelectElement dSelect = new SelectElement(element.FindElement(By.ClassName("ui-datepicker-year")));
+                dSelect.SelectByText(Convert.ToString(usr1.txtDob.Year));//"1956");//
 
-            //enter Login Name
-            element = driver.FindElement(By.Name("city"));
-            element.SendKeys(usr1.city);
+                //select month
+                dSelect = new SelectElement(driver.FindElement(By.ClassName("ui-datepicker-month")));
+                dSelect.SelectByText(CultureInfo.CurrentCulture.DateTimeFormat.GetAbbreviatedMonthName(usr1.txtDob.Month));//"Jun");
 
-            //enter Login Name
-            element = driver.FindElement(By.Name("stateName"));
-            element.SendKeys(usr1.state);
+                //Click Date
+                driver.FindElement(By.XPath($"//*[text()='{usr1.txtDob.Day}']")).Click();
+            }
 
-            //enter Login Name
-            element = driver.FindElement(By.Name("zipCode"));
-            element.SendKeys(Convert.ToString(usr1.zipCode));
-
-            //enter Login Name
-            element = driver.FindElement(By.Name("idNumber"));
-            element.SendKeys(Convert.ToString(usr1.idNumber));
-
-            //enter Login Name
-            element = driver.FindElement(By.Name("issueAuthority"));
-            element.SendKeys(usr1.issueAuthority);
-
+            //enter mobile
+            driver.FindElement(By.Name("mobileNo")).SendKeys(Convert.ToString(usr1.mobileNo));
 
             //enter nationality ID
-            //driver.FindElement(By.Id("genderId")).FindElement(By.XPath(".//option[contains(text(),'MALE')]")).Click();
             SelectElement oSelect = new SelectElement(driver.FindElement(By.Name("nationalityId")));
             oSelect.SelectByText("INDIAN");
 
-
-            //enter nationality ID
-            oSelect = new SelectElement(driver.FindElement(By.Name("proofTypeId")));
-            oSelect.SelectByText("VOTER ID");
-
-            //enter Country
-            oSelect = new SelectElement(driver.FindElement(By.Name("countryCode")));
-            oSelect.SelectByText("India");
-
-
             //enter address
             element = driver.FindElement(By.Name("address1"));
-            // ReadOnlyCollection<IWebElement> AllDropDownList = driver.FindElements(By.XPath("//option"));
             if (usr1.address.Length > Convert.ToInt32(element.GetAttribute("maxlength")))
             {
                 element.SendKeys(usr1.address.Substring(0, Convert.ToInt32(element.GetAttribute("maxlength"))));
@@ -205,30 +188,32 @@ namespace FillSignup
 
             }
 
-            Thread.Sleep(2000);
-            //enter Dob
-            element = driver.FindElement(By.Name("txtDob"));
-            element.Click();
+            //enter city
+            driver.FindElement(By.Name("city")).SendKeys(usr1.city);
 
-            element = driver.FindElement(By.XPath("//*[@id=\"ui-datepicker-div\"]"));
-            if (element.Displayed)
-            {
+            //enter state
+            driver.FindElement(By.Name("stateName")).SendKeys(usr1.state);
 
-                //select year
-                oSelect = new SelectElement(element.FindElement(By.ClassName("ui-datepicker-year")));
-                oSelect.SelectByText(Convert.ToString(usr1.txtDob.Year));//"1956");//
+            //enter Country
+            oSelect = new SelectElement(driver.FindElement(By.Name("countryCode")));
+            oSelect.SelectByText("India");
 
-                //select month
-                oSelect = new SelectElement(driver.FindElement(By.ClassName("ui-datepicker-month")));
-                oSelect.SelectByText(CultureInfo.CurrentCulture.DateTimeFormat.GetAbbreviatedMonthName(usr1.txtDob.Month));//"Jun");
+            //enter zip Code
+            driver.FindElement(By.Name("zipCode")).SendKeys(Convert.ToString(usr1.zipCode));
 
-                //Click Date
-                driver.FindElement(By.XPath($"//*[text()='{usr1.txtDob.Day}']")).Click();
-            }
+            //enter nationality ID
+            oSelect = new SelectElement(driver.FindElement(By.Name("proofTypeId")));
+            oSelect.SelectByText("VOTER ID");
 
+            //enter Login Name
+            element = driver.FindElement(By.Name("idNumber"));
+            element.SendKeys(Convert.ToString(usr1.idNumber));
 
-
-
+            //enter Login Name
+            element = driver.FindElement(By.Name("issueAuthority"));
+            element.SendKeys(usr1.issueAuthority);
+            
+            
         }
     }
 }
