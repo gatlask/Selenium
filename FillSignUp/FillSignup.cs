@@ -187,6 +187,10 @@ namespace FillSignup
                 element.SendKeys(usr1.address.Substring(Convert.ToInt32(element.GetAttribute("maxlength"))));
 
             }
+            else
+            {
+                element.SendKeys(usr1.address);
+            }
 
             //enter city
             driver.FindElement(By.Name("city")).SendKeys(usr1.city);
